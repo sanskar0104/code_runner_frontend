@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AI Code Assistant</title>
+</head>
+<body>
+  <h2>Describe Your Problem Statement:</h2>
+  <form id="promptForm">
+    <textarea id="prompt" rows="10" cols="80" placeholder="e.g., generate a Python function to add two numbers"></textarea><br><br>
+
+    <h3>Optional: Upload a Python File</h3>
+    <input type="file" id="pyfile" accept=".py"><br><br>
+
+    <button type="submit">Generate</button>
+  </form>
+
+  <script>
+    document.getElementById("promptForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const prompt = document.getElementById("prompt").value;
+      const file = document.getElementById("pyfile").files[0];
+
+      const formData = new FormData();
+      formData.append("prompt", prompt);
+      if (file) formData.append("file", file);
+
+      const res = await fetch("https://your-backend.onrender.com/aider-generate/", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+      localStorage.setItem("codePayload", JSON.stringify({ code: data.generated_code }));
+      localStorage.setItem("mode", "aider");
+      window.location.href = "index.html";
+    });
+  </script>
+</body>
+</html>
