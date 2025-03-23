@@ -24,7 +24,7 @@
       formData.append("prompt", prompt);
       if (file) formData.append("file", file);
 
-      const res = await fetch("https://your-backend.onrender.com/aider-generate/", {
+      const res = await fetch("https://code-runner-backend-yjzx.onrender.com/aider-generate/", {
         method: "POST",
         body: formData
       });
