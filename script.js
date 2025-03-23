@@ -2,7 +2,7 @@
 const BACKEND_URL = "https://your-backend.onrender.com";
 
 // Handle "Run Code" form on index.html
-if (location.pathname.endsWith("index.html") || location.pathname.endsWith("/")) {
+if (location.pathname.endsWith("code.html")) {
   const mode = localStorage.getItem("mode");
 
   // Aider-generated code: pre-fill and lock the textarea
