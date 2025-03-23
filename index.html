@@ -20,18 +20,19 @@
       const prompt = document.getElementById("prompt").value;
       const file = document.getElementById("pyfile").files[0];
 
-      const formData = new FormData();
-      formData.append("prompt", prompt);
-      if (file) formData.append("file", file);
+      const payload = { prompt };
 
-      const res = await fetch("https://code-runner-backend-yjzx.onrender.com/aider-generate/", {
-        method: "POST",
-        body: formData
-      });
+      if (file) {
+        const fileText = await file.text();
+        payload.fileContent = fileText;
+        payload.fileName = file.name;
+      }
 
-      const data = await res.json();
-      localStorage.setItem("codePayload", JSON.stringify({ code: data.generated_code }));
+      // Save to localStorage
+      localStorage.setItem("pendingPrompt", JSON.stringify(payload));
       localStorage.setItem("mode", "aider");
+
+      // ✅ Redirect immediately to code.html
       window.location.href = "code.html";
     });
   </script>
