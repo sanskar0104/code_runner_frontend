@@ -32,7 +32,7 @@
       const data = await res.json();
       localStorage.setItem("codePayload", JSON.stringify({ code: data.generated_code }));
       localStorage.setItem("mode", "aider");
-      window.location.href = "index.html";
+      window.location.href = "code.html";
     });
   </script>
 </body>
