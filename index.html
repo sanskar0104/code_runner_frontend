@@ -6,9 +6,9 @@
 <body>
   <h2>Describe Your Problem Statement:</h2>
   <form id="promptForm">
-    <textarea id="prompt" rows="10" cols="80" placeholder="e.g., generate a Python function to add two numbers"></textarea><br><br>
+    <textarea id="prompt" rows="10" cols="80" placeholder="e.g., generate a Python function to add two numbers" required></textarea><br><br>
 
-    <h3>Optional: Upload a Python File</h3>
+    <h3>Optional: Upload a Python File to Edit</h3>
     <input type="file" id="pyfile" accept=".py"><br><br>
 
     <button type="submit">Generate</button>
@@ -17,9 +17,14 @@
   <script>
     document.getElementById("promptForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const prompt = document.getElementById("prompt").value;
-      const file = document.getElementById("pyfile").files[0];
 
+      const prompt = document.getElementById("prompt").value.trim();
+      if (!prompt) {
+        alert("Please enter a problem statement.");
+        return;
+      }
+
+      const file = document.getElementById("pyfile").files[0];
       const payload = { prompt };
 
       if (file) {
@@ -28,11 +33,11 @@
         payload.fileName = file.name;
       }
 
-      // Save to localStorage
+      // Save data to localStorage for code.html
       localStorage.setItem("pendingPrompt", JSON.stringify(payload));
       localStorage.setItem("mode", "aider");
 
-      // ✅ Redirect immediately to code.html
+      // Redirect to code.html to trigger code generation
       window.location.href = "code.html";
     });
   </script>

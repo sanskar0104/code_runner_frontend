@@ -3,13 +3,24 @@
 <head><title>Result</title></head>
 <body>
   <h2>Execution Result</h2>
-  <p id="status">Generating results...</p>
-  <pre id="jsonOutput"></pre>
 
-  <br>
+  <!-- Status message -->
+  <p id="status">Fetching results...</p>
+
+  <!-- Dropdown to select output version -->
+  <label for="outputVersionSelect">Select Output Version:</label>
+  <select id="outputVersionSelect"></select>
+
+  <!-- Result display -->
+  <pre id="jsonOutput">Waiting for result...</pre>
+
+  <br><br>
+
+  <!-- Action buttons -->
   <button id="regenerateBtn">Regenerate</button>
   <button id="paperBtn">Paper Writing</button>
 
+  <!-- JS -->
   <script src="script.js"></script>
 </body>
 </html>
