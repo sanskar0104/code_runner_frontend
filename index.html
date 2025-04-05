@@ -17,22 +17,26 @@
   <script>
     document.getElementById("promptForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const prompt = document.getElementById("prompt").value;
+
+      const prompt = document.getElementById("prompt").value.trim();
       const file = document.getElementById("pyfile").files[0];
+
+      if (!prompt) {
+        alert("Please enter a valid problem statement.");
+        return;
+      }
 
       const payload = { prompt };
 
       if (file) {
-        const fileText = await file.text();
-        payload.fileContent = fileText;
+        const text = await file.text();
+        payload.fileContent = text;
         payload.fileName = file.name;
       }
 
-      // Save to localStorage
-      localStorage.setItem("pendingPrompt", JSON.stringify(payload));
       localStorage.setItem("mode", "aider");
+      localStorage.setItem("pendingPrompt", JSON.stringify(payload));
 
-      // ✅ Redirect immediately to code.html
       window.location.href = "code.html";
     });
   </script>

@@ -27,14 +27,16 @@ if (location.pathname.endsWith("code.html")) {
         const finalCode = data.generated_code || "# No code returned by Aider.";
         textarea.value = finalCode;
         textarea.readOnly = true;
+
         localStorage.setItem("codePayload", JSON.stringify({ code: finalCode }));
+        localStorage.setItem("mode", "aider");
+        localStorage.setItem("session_id", data.session_id);
       })
       .catch((err) => {
         textarea.value = "# Error generating code:\n" + err.toString();
       });
   }
 
-  // Run code via backend execution
   document.getElementById("codeForm").addEventListener("submit", (e) => {
     e.preventDefault();
     const code = document.getElementById("code").value;
@@ -43,7 +45,6 @@ if (location.pathname.endsWith("code.html")) {
     window.location.href = "result.html";
   });
 
-  // Upload JSON result (to backend!)
   document.getElementById("uploadForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const file = document.getElementById("jsonFile").files[0];
@@ -53,22 +54,14 @@ if (location.pathname.endsWith("code.html")) {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const res = await fetch(`${BACKEND_URL}/upload-json/`, {
-      method: "POST",
-      body: formData
-    });
-
-    const data = await res.json();
-    localStorage.setItem("uploadedJSON", JSON.stringify(data.result));
+    const content = await file.text();
+    localStorage.setItem("uploadedJSON", content);
     localStorage.setItem("mode", "upload");
     window.location.href = "result.html";
   });
 }
 
-// Handle result.html logic
+// Handle everything for result.html
 if (location.pathname.endsWith("result.html")) {
   const mode = localStorage.getItem("mode");
   const output = document.getElementById("jsonOutput");
@@ -96,6 +89,32 @@ if (location.pathname.endsWith("result.html")) {
       });
   }
 
-  document.getElementById("regenerateBtn").onclick = () => {};
-  document.getElementById("paperBtn").onclick = () => {};
+  document.getElementById("regenerateBtn").onclick = async () => {
+    const session_id = localStorage.getItem("session_id");
+    if (!session_id) return alert("No session available to regenerate.");
+
+    const formData = new FormData();
+    formData.append("session_id", session_id);
+
+    localStorage.setItem("mode", "aider");
+    window.location.href = "code.html";
+
+    const textarea = document.getElementById("code");
+    if (textarea) textarea.value = "Regenerating code...";
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/regenerate/`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      localStorage.setItem("codePayload", JSON.stringify({ code: data.generated_code }));
+    } catch (err) {
+      console.error("Regeneration failed:", err);
+    }
+  };
+
+  document.getElementById("paperBtn").onclick = () => {
+    alert("Paper Writing feature coming soon!");
+  };
 }
