@@ -1,5 +1,5 @@
 // ✅ Replace this with your actual backend Render URL:
-const BACKEND_URL = "https://your-backend.onrender.com";
+const BACKEND_URL = "https://code-runner-backend-wxfd.onrender.com";
 
 // Handle everything for code.html
 if (location.pathname.endsWith("code.html")) {
