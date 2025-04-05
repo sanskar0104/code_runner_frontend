@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>AI Code Generator</title>
+  <title>AI Code Assistant</title>
 </head>
 <body>
   <h2>Describe Your Problem Statement:</h2>
@@ -20,20 +20,19 @@
       const prompt = document.getElementById("prompt").value;
       const file = document.getElementById("pyfile").files[0];
 
-      if (!prompt.trim()) {
-        alert("Please enter a prompt.");
-        return;
+      const payload = { prompt };
+
+      if (file) {
+        const fileText = await file.text();
+        payload.fileContent = fileText;
+        payload.fileName = file.name;
       }
 
-      const reader = file ? await file.text() : null;
-
+      // Save to localStorage
+      localStorage.setItem("pendingPrompt", JSON.stringify(payload));
       localStorage.setItem("mode", "aider");
-      localStorage.setItem("pendingPrompt", JSON.stringify({
-        prompt,
-        fileName: file?.name || null,
-        fileContent: reader || null
-      }));
 
+      // ✅ Redirect immediately to code.html
       window.location.href = "code.html";
     });
   </script>
