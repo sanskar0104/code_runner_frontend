@@ -1,4 +1,4 @@
-const BACKEND_URL = "https://your-backend.onrender.com";  // ✅ Replace with your actual backend URL
+const BACKEND_URL = "https://code-runner-backend-yjzx.onrender.com";
 
 // === code.html logic ===
 if (location.pathname.endsWith("code.html")) {
